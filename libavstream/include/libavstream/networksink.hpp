@@ -6,10 +6,6 @@
 #include <libavstream/common.hpp>
 #include <libavstream/node.hpp>
 #include <libavstream/stream/parser_interface.hpp>
-#if LIBAV_USE_SRT
-#include <srt.h>
-#endif
-
 
 namespace avs
 {

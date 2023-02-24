@@ -17,9 +17,9 @@
 #include <network/packetformat.hpp>
 #include <util/bytebuffer.hpp>
 #include <libavstream/networksink.hpp>
-#if LIBAV_USE_SRT
+
 #include <srt.h>
-#endif
+
 #include <ElasticFrameProtocol.h>
 
 namespace avs
@@ -28,17 +28,13 @@ namespace avs
 	struct NetworkSink::Private final : public PipelineNode::Private
 	{
 		AVSTREAM_PRIVATEINTERFACE(NetworkSink, PipelineNode)
-#if LIBAV_USE_SRT
+
 		SRTSOCKET m_socket=0;
 		SRTSOCKET m_remote_socket=0;
 		sockaddr_in remote_addr;
 		int pollid=0;
 		bool bConnected=false;
-#else
-		std::unique_ptr<asio::io_service> m_service;
-		std::unique_ptr<udp::socket> m_socket;
-		std::unique_ptr<udp::endpoint> m_endpoint;
-#endif
+
 		NetworkSinkCounters m_counters;
 		uint32_t m_minBandwidthUsed;
 

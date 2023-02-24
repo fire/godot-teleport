@@ -21,9 +21,7 @@
 
 #include <libavstream/networksource.hpp>
 
-#if LIBAV_USE_SRT
 #include <srt.h>
-#endif
 #include <thread>
 #include "ElasticFrameProtocol.h"
 
@@ -81,16 +79,11 @@ namespace avs
 	{
 		AVSTREAM_PRIVATEINTERFACE(NetworkSource, PipelineNode)
 			
-#if LIBAV_USE_SRT
 		SRTSOCKET m_socket;
 		sockaddr_in remote_addr;
 		bool bConnected=false;
 		int pollid=0;
-#else
-		std::unique_ptr<asio::io_service> m_service;
-		std::unique_ptr<udp::socket> m_socket;
-		std::unique_ptr<udp::endpoint> m_endpoint;
-#endif
+		
 		std::vector<NetworkSourceStream> m_streams;
 		std::unordered_map<uint32_t, int> m_streamNodeMap;
 		NetworkSourceParams m_params;

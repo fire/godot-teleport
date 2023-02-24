@@ -6,8 +6,6 @@ set(LIBAV_CUDA_DIR "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.5" CA
 # Build options
 option(LIBAV_USE_DYNAMIC_RUNTIME "Use dynamic (MD) runtime?" OFF)
 option(LIBAV_BUILD_SHARED_LIBS "Build shared library" OFF)
-option(LIBAV_USE_SRT "Use SRT?" OFF)
-option(LIBAV_USE_EFP "Use EFP?" OFF)
 
 set(LIBAVS)
 if(NOT ANDROID)
@@ -97,7 +95,10 @@ source_group("Source Files\\stream" src FILES ${src_private_stream} )
 source_group("Source Files\\util" src FILES ${src_private_util} )
 source_group("Source Files\\audio" src FILES ${src_private_audio} )
 
-set(hdr_private ${hdr_private_root} ${hdr_private_api} ${hdr_private_stream} ${hdr_private_parsers} ${hdr_private_network} ${hdr_private_decoders} ${hdr_private_encoders} ${hdr_private_util} )
+set(srt_include_paths "../thirdparty/srt/common" "thirdparty/srt/build_desktop""../thirdparty/srt/srtcore" ${SRT_BINARY_DIR})
+message(WARNING srt_include_paths ${srt_include_paths})
+
+set(hdr_private ${hdr_private_root} ${hdr_private_api} ${hdr_private_stream} ${hdr_private_parsers} ${hdr_private_network} ${hdr_private_decoders} ${hdr_private_encoders} ${hdr_private_util} ${srt_include_paths})
 
 source_group("Private Headers" src FILES ${hdr_private_root} )
 source_group("Private Headers\\api" src FILES ${hdr_private_api} )
@@ -226,10 +227,7 @@ add_library(libavstream STATIC ${hdr_private} ${src_private} ${hdr_public} ${src
 set_target_properties(libavstream PROPERTIES PREFIX "")
 set_target_properties(libavstream PROPERTIES FOLDER AVStream)
 target_compile_definitions(libavstream PRIVATE ${def_platform})
-if(LIBAV_USE_SRT)
-	set(srt_include_paths "${SRT_SOURCE_DIR}/common" "${SRT_SOURCE_DIR}/srtcore" ${SRT_BINARY_DIR})
-	#message(WARNING srt_include_paths ${srt_include_paths})
-endif()
+
 if(LIBAV_USE_EFP)
 	# ElasticFrameProtocol
 	add_subdirectory(thirdparty/efp)
@@ -241,30 +239,6 @@ if(LIBAV_USE_EFP)
 	#message(WARNING efp_include_paths ${efp_include_paths})
 endif()
 
-if(NOT TELEPORT_SERVER)
-	
-	
-    set(BUILD_CURL_EXE OFF CACHE BOOL "")
-    set(CURL_STATIC_CRT ON CACHE BOOL "")
-	set(BUILD_SHARED_LIBS OFF CACHE BOOL "")
-	set(BUILD_TESTING OFF CACHE BOOL "")
-	# SCHANNEL is for native windows SSL.
-	set(CURL_USE_SCHANNEL ON CACHE BOOL "")
-	#set(CURL_USE_OPENSSL ON CACHE BOOL "")
-	# curl fails to find Wldap32 lib for some reason if openssl is enabled and LDAP is not diabled.
-	#set(CURL_DISABLE_LDAP ON CACHE BOOL "")
-	#set(CURL_DISABLE_LDAPS ON CACHE BOOL "")
-	#set(USE_WIN32_LDAP OFF CACHE BOOL "")
-	#set(CMAKE_LDAP_LIB "C:/Program Files (x86)/Windows Kits/10/Lib/10.0.19041.0/um/x64/Wldap32" CACHE STRING "")
-	#set(CMAKE_LBER_LIB ${CMAKE_LDAP_LIB} CACHE STRING "")
-	#add_definitions(-DCURL_STATICLIB)
-    add_subdirectory(thirdparty/curl)
-	set_target_properties(libcurl PROPERTIES FOLDER AVStream/thirdparty/curl)
-	target_compile_definitions(libcurl PRIVATE BUILDING_LIBCURL=1) 
-	set(curl_include_paths "${CURL_SOURCE_DIR}/include" ${CURL_BINARY_DIR})
-	set(curl_libraries libcurl)
-	target_compile_definitions(libavstream PUBLIC IS_CLIENT=1) 
-endif()
 target_include_directories(libavstream PRIVATE src PRIVATE ${CMAKE_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${srt_include_paths} ${efp_include_paths} ${curl_include_paths} include ${PTHREAD_INCLUDE_DIR} PUBLIC include/libavstream)
 target_compile_features(libavstream PRIVATE cxx_std_17)
 
@@ -273,11 +247,6 @@ if(LIBAV_BUILD_SHARED_LIBS)
 		PUBLIC LIBAVSTREAM_SHARED
 		PRIVATE LIBAVSTREAM_EXPORTS
 	)
-endif()
-if(LIBAV_USE_SRT)
-	target_compile_definitions(libavstream PRIVATE LIBAV_USE_SRT=1)
-else()
-	target_compile_definitions(libavstream PRIVATE LIBAV_USE_SRT=0)
 endif()
 
 if(CMAKE_SIZEOF_VOID_P EQUAL 8)

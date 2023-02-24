@@ -10,7 +10,6 @@ include $(CLEAR_VARS)				# clean everything up to prepare for a module
 LOCAL_MODULE    := avstream	        # generate libavstream.a
 
 include $(LOCAL_PATH)/../../client/cflags.mk
-LOCAL_CFLAGS	+= -DLIBAV_USE_SRT=1
 
 LOCAL_C_INCLUDES += \
   $(LOCAL_PATH)/../include

@@ -1,7 +1,6 @@
 #include "util/srtutil.h"
 #include "logger.hpp"
 
-#if LIBAV_USE_SRT
 using namespace avs;
 
 sockaddr_in avs::CreateAddrInet(const std::string& name, unsigned short port)
@@ -49,4 +48,3 @@ void avs::CHECK_SRT_ERROR(int err)
 	const char* errstr=srt_getlasterror_str();
     AVSLOG(Error) << "Srt: error: " << (errstr ? errstr : "unknown") << "\n";
 }
-#endif
