@@ -63,18 +63,10 @@ set(OPENSSL_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/thirdparty/openssl/include)
 set( CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin )
 
 #defaults for basisu
-if(TELEPORT_SERVER)
-	option(STATIC "" OFF)
-	set(CMAKE_CXX_FLAGS_RELEASE "/Od /Ob0 /Zi /DNDEBUG /DNOMINMAX /MT")
-	set(CMAKE_CXX_FLAGS_DEBUG "/Zi /Ob0 /Od /RTC1 /DNOMINMAX /MDd")
-else()
-	option(STATIC "" ON)
-	set(CMAKE_CXX_FLAGS_RELEASE "/MT /Od /Ob0 /Zi /DNDEBUG /DNOMINMAX")
-	set(CMAKE_CXX_FLAGS_DEBUG "/MTd /Zi /Ob0 /Od /RTC1 /DNOMINMAX")
-	set(CMAKE_C_FLAGS_RELEASE "/MT  /O2 /Ob2 /DNDEBUG /DNOMINMAX")
-	set(CMAKE_C_FLAGS_DEBUG "/MTd /Zi /Ob0 /Od /RTC1 /DNOMINMAX")
-		#someday we will add /fsanitize=address - when MS have fixed all the address bugs in their core libs.)
-endif()
+option(STATIC "" OFF)
+set(CMAKE_CXX_FLAGS_RELEASE "/Od /Ob0 /Zi /DNDEBUG /DNOMINMAX /MT")
+set(CMAKE_CXX_FLAGS_DEBUG "/Zi /Ob0 /Od /RTC1 /DNOMINMAX /MDd")
+
 
 option(BUILD_AS_LIBRARY "" ON) 
 
@@ -122,23 +114,16 @@ endfunction()
 
 add_subdirectory(TeleportCore)
 
-if(TELEPORT_SERVER)
-	# Server doesn't include Platform, so load fmt separately.
-	add_subdirectory(firstparty/Platform/External/fmt)
-	set(LIBAV_USE_DYNAMIC_RUNTIME ON CACHE BOOL "")
-	set(LIBAV_BUILD_SHARED_LIBS ON CACHE BOOL "")
-	add_subdirectory(thirdparty/cpp-httplib)
-endif()
+# Server doesn't include Platform, so load fmt separately.
+add_subdirectory(thirdparty/fmt)
+set(LIBAV_USE_DYNAMIC_RUNTIME ON CACHE BOOL "")
+set(LIBAV_BUILD_SHARED_LIBS ON CACHE BOOL "")
+add_subdirectory(thirdparty/cpp-httplib)
 
-if(TELEPORT_SERVER OR TELEPORT_BUILD_DOCS)
-	add_subdirectory(TeleportServer)
-endif()
+add_subdirectory(TeleportServer)
  
-if(TELEPORT_SERVER)
-	set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT TeleportServer)
-endif()
+set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT TeleportServer)
 
-add_subdirectory(TeleportAudio)
 add_subdirectory(libavstream)
 
 target_compile_definitions(libavstream PRIVATE LIBAV_USE_D3D12=0)

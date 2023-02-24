@@ -1,8 +1,5 @@
 #pragma once
 
-#include "IUnityInterface.h"
-#include "IUnityGraphics.h"
-
 namespace teleport
 {
 	class GraphicsManager
@@ -13,9 +10,8 @@ namespace teleport
 		static void ReleaseResource(void* resource);
 		static void AddResourceRef(void* texture);
 
-		static IUnityInterfaces* mUnityInterfaces;
-		static IUnityGraphics* mGraphics;
-		static UnityGfxRenderer mRendererType;
+		static void* mUnityInterfaces;
+		static void* mGraphics;
 		static void* mGraphicsDevice;
 	};
 }

@@ -6,8 +6,6 @@
 #include "TeleportCore/ErrorHandling.h"
 #include "ServerSettings.h"
 
-#include "AudioStreamTarget.h"
-
 using namespace teleport;
 using namespace server;
 

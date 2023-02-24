@@ -158,8 +158,6 @@ using namespace server;
 
 	uint16_t ClientManager::getServerPort() const
 	{
-		assert(host);
-
 		return mHost->address.port;
 	}
 

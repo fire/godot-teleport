@@ -9,7 +9,6 @@
 #include "SourceNetworkPipeline.h"
 #include <libavstream/audiodecoder.h>
 #include <libavstream/audio/audiotarget.h>
-#include <CustomAudioStreamTarget.h>
 
 namespace teleport
 {
@@ -30,7 +29,7 @@ namespace teleport
 			std::unique_ptr<avs::Queue> sourceAudioQueue;
 			std::unique_ptr<avs::AudioDecoder> audioDecoder;
 			std::unique_ptr<avs::AudioTarget> audioTarget;
-			std::unique_ptr<sca::CustomAudioStreamTarget> audioStreamTarget;
+			std::unique_ptr<void *> audioStreamTarget;
 
 			bool isCapturingDepth = false;
 			avs::AxesStandard axesStandard = avs::AxesStandard::NotInitialized;

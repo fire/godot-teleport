@@ -20,7 +20,7 @@
 #include "draco/compression/encode.h"
 #include "draco/compression/decode.h"
 
-#include "Platform/Shaders/SL/CppSl.sl"
+#include "thirdparty/misc/CppSl.sl"
 #include "Font.h"
 #include "UnityPlugin/InteropStructures.h"
 

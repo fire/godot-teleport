@@ -20,12 +20,6 @@
 #include "ClientRender/ResourceCreator.h"
 #include "ClientRender/GeometryDecoder.h"
 #include "TeleportClient/Config.h"
-#include "TeleportAudio/AudioStreamTarget.h"
-#include "TeleportAudio/AudioCommon.h"
-#ifdef _MSC_VER
-#include "TeleportAudio/PC_AudioPlayer.h"
-#endif
-#include "TeleportAudio/NetworkPipeline.h"
 
 namespace clientrender
 {

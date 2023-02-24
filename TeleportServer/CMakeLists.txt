@@ -67,8 +67,6 @@ target_include_directories(TeleportServer PUBLIC .. )
 target_include_directories(TeleportServer PUBLIC ../libavstream/include)
 #Include TeleportCore
 target_include_directories(TeleportServer PUBLIC ../TeleportCore)
-#Include TeleportAudio
-target_include_directories(TeleportServer PUBLIC ../TeleportAudio)
 #Include Basis Universal
 target_include_directories(TeleportServer PUBLIC ../thirdparty/basis_universal/encoder)
 #Include enet
@@ -83,17 +81,14 @@ target_include_directories(TeleportServer PUBLIC ../thirdparty/cpp-httplib)
 #Include Platform - for pure header functions only.sr
 target_include_directories(TeleportServer PUBLIC ../firstparty)
 # stb truetype
-target_include_directories(TeleportServer PUBLIC ../firstparty/Platform/External/stb)
+target_include_directories(TeleportServer PUBLIC ../thirdparty/stb)
 
-if(${TELEPORT_SERVER_SUPPORT_WEBRTC})
-	target_include_directories(TeleportServer PUBLIC ${TELEPORT_LIBWEBRTC_BUILD_DIR}/include)
-endif()
 #Include CUDA library location.
 #target_link_directories(TeleportServer PUBLIC "${LIBAV_CUDA_DIR}/lib/x64")
 
 target_link_directories(TeleportServer PUBLIC ../thirdparty/openssl/lib/MT)
 
-target_link_libraries(TeleportServer TeleportAudio TeleportCore libavstream enet basisu efp winmm d3d12 draco libssl libcrypto fmt)
+target_link_libraries(TeleportServer TeleportCore libavstream enet basisu efp winmm d3d12 draco libssl libcrypto fmt)
 if(${TELEPORT_SERVER_SUPPORT_WEBRTC})
 	target_link_directories(TeleportServer PUBLIC ${TELEPORT_LIBWEBRTC_BUILD_DIR}/lib)
 	target_link_libraries(TeleportServer webrtc.lib)
