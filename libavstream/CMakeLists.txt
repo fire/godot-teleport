@@ -262,4 +262,4 @@ if(LIBAV_BUILD_TESTS)
 	add_subdirectory(tests)
 endif()
 
-target_link_libraries(libavstream cudart asio srt_static efp ${curl_libraries})
+target_link_libraries(libavstream asio srt_static efp ${curl_libraries})

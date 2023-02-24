@@ -85,14 +85,7 @@ endfunction()
 
 function(SetTeleportDefaults targname)
 	set_target_properties( ${targname} PROPERTIES PREFIX "" )
-	set_property(TARGET ${targname} PROPERTY COMPILE_WARNING_AS_ERROR ON)
 	add_definitions(-DUNICODE -D_UNICODE)
-	if(MSVC)
-	# Treat angle-brackets as representing external headers. Minimal warnings for external headers.
-		target_compile_options(${targname} PRIVATE /W3 /wd4011 /wd4514 /JMC /external:anglebrackets /external:W0)
-	else()
-		target_compile_options(${targname} PRIVATE -Wall -Wextra -pedantic -Werror )
-	endif()
 	target_compile_definitions(${targname} PRIVATE CMAKE_BINARY_DIR=${CMAKE_BINARY_DIR} TELEPORT_SUPPORT_AUDIO=$<BOOL:${TELEPORT_SUPPORT_AUDIO}> CMAKE_SOURCE_DIR=${CMAKE_SOURCE_DIR} TELEPORT_INTERNAL_CHECKS=$<BOOL:${TELEPORT_INTERNAL_CHECKS}>)
 	#message("target_compile_definitions(${targname} PRIVATE CMAKE_BINARY_DIR=${CMAKE_BINARY_DIR} TELEPORT_SUPPORT_AUDIO=$<BOOL:${TELEPORT_SUPPORT_AUDIO}> CMAKE_SOURCE_DIR=${CMAKE_SOURCE_DIR} TELEPORT_INTERNAL_CHECKS=$<BOOL:${TELEPORT_INTERNAL_CHECKS}>)")
 endfunction()
@@ -158,7 +151,6 @@ if(TELEPORT_CLIENT OR TELEPORT_BUILD_DOCS)
 	set_target_properties( srt_static PROPERTIES FOLDER thirdparty/srt)
 endif()
 set_target_properties( srt_virtual PROPERTIES FOLDER thirdparty/srt)
-
 
 if(TELEPORT_BUILD_DOCS)
 	add_subdirectory ("docs")

@@ -56,7 +56,7 @@ else()
 endif()
 
 #Create static library with source files from group.
-add_library(TeleportServer STATIC ${src})
+add_library(TeleportServer ${src})
 
 SetTeleportDefaults( TeleportServer )
 
@@ -83,12 +83,9 @@ target_include_directories(TeleportServer PUBLIC ../firstparty)
 # stb truetype
 target_include_directories(TeleportServer PUBLIC ../thirdparty/stb)
 
-#Include CUDA library location.
-#target_link_directories(TeleportServer PUBLIC "${LIBAV_CUDA_DIR}/lib/x64")
-
 target_link_directories(TeleportServer PUBLIC ../thirdparty/openssl/lib/MT)
 
-target_link_libraries(TeleportServer TeleportCore libavstream enet basisu efp winmm d3d12 draco libssl libcrypto fmt)
+target_link_libraries(TeleportServer TeleportCore libavstream enet efp winmm draco libssl libcrypto fmt pthread_static_lib)
 if(${TELEPORT_SERVER_SUPPORT_WEBRTC})
 	target_link_directories(TeleportServer PUBLIC ${TELEPORT_LIBWEBRTC_BUILD_DIR}/lib)
 	target_link_libraries(TeleportServer webrtc.lib)

@@ -1446,7 +1446,7 @@ template<typename ExtractedResource> bool GeometryStore::loadResourceBinary(cons
 
 template<typename ExtractedResource> bool GeometryStore::saveResource(const std::string file_name, const ExtractedResource& resource) const
 {
-	bool oldFileExists = filesystem::exists(file_name);
+	bool oldFileExists = std::filesystem::exists(file_name);
 
 	//Rename old file.
 	if (oldFileExists)

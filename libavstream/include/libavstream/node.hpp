@@ -11,6 +11,8 @@
 
 #include <vector>
 
+#pragma clang diagnostic ignored "-Wunused-parameter"
+
 namespace avs
 {
 	/*!
