@@ -47,7 +47,6 @@ LOCAL_SRC_FILES  := 	../src/context.cpp \
                         ../src/stream/parser.cpp \
                         ../src/stream/parser_avc.cpp \
                         ../src/stream/parser_geo.cpp \
-                        ../src/decoders/dec_nvidia.cpp \
                         ../src/libraryloader.cpp \
                         ../src/platforms/platform_posix.cpp \
                         ../src/geometrydecoder.cpp \

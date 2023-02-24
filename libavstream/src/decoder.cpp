@@ -2,7 +2,6 @@
 // (c) Copyright 2018-2022 Simul Software Ltd
 
 #include "decoder_p.hpp"
-#include "decoders/dec_nvidia.hpp"
 
 #include <libavstream/surface.hpp>
 #include <libavstream/surfaces/surface_interface.hpp>
@@ -54,10 +53,6 @@ Result Decoder::configure(const DeviceHandle& device, int frameWidth, int frameH
 		// TODO: Detect support for various backends.
 		switch (backendType)
 		{
-#if !defined(PLATFORM_ANDROID)
-		case DecoderBackend::NVIDIA:
-			return new DecoderNV;
-#endif // !PLATFORM_ANDROID
 		default:
 			return nullptr;
 		}

@@ -2,7 +2,6 @@
 // (c) Copyright 2018-2022 Simul Software Ltd
 
 #include "encoder_p.hpp"
-#include "encoders/enc_nvidia.hpp"
 
 #include <libavstream/buffer.hpp>
 #include <libavstream/surface.hpp>
@@ -41,12 +40,6 @@ Result Encoder::configure(const DeviceHandle& device, int frameWidth, int frameH
 	{
 		switch (backendType)
 		{
-#if !defined(PLATFORM_ANDROID)
-		case EncoderBackend::NVIDIA:
-			// BUG: This only checks if NVENC libs are present in the system, may fail if multiple GPUs are present.
-			//      Replace with more robust (device ID?) checks.
-			return EncoderNV::checkSupport() ? new EncoderNV : nullptr;
-#endif // !PLATFORM_ANDROID
 		default:
 			return nullptr;
 		}
@@ -357,11 +350,7 @@ EncoderStats Encoder::getStats() const
 
 Result Encoder::getEncodeCapabilities(const DeviceHandle& device, const EncoderParams& params, avs::EncodeCapabilities& capabilities)
 {
-#if !defined(PLATFORM_ANDROID)
-	 return EncoderNV::getEncodeCapabilities(device, params, capabilities);
-#else
 	 return Result::NotSupported;
-#endif 
 }
 
 Result Encoder::Private::writeOutput(IOInterface* outputNode, const void* mappedBuffer, size_t mappedBufferSize)

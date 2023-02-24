@@ -6,8 +6,8 @@ set(LIBAV_CUDA_DIR "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.5" CA
 # Build options
 option(LIBAV_USE_DYNAMIC_RUNTIME "Use dynamic (MD) runtime?" OFF)
 option(LIBAV_BUILD_SHARED_LIBS "Build shared library" OFF)
-option(LIBAV_USE_SRT "Use SRT?" ON)
-option(LIBAV_USE_EFP "Use EFP?" ON)
+option(LIBAV_USE_SRT "Use SRT?" OFF)
+option(LIBAV_USE_EFP "Use EFP?" OFF)
 
 set(LIBAVS)
 if(NOT ANDROID)
@@ -44,10 +44,6 @@ set(src_private_stream
 	src/stream/parser_avc.cpp
 	src/stream/parser_geo.cpp
 	src/stream/parser.cpp
-	src/decoders/dec_nvidia.cpp
-	src/encoders/enc_nvidia.cpp
-	src/decoders/dec_nvidia.cu
-	src/encoders/enc_nvidia.cu
 )
 set(hdr_private_root
 	src/common_p.hpp
@@ -84,10 +80,6 @@ set(hdr_private_parsers
 set(hdr_private_network
 	src/network/packetformat.hpp
 	src/network/serial.hpp)
-set(hdr_private_decoders
-	src/decoders/dec_nvidia.hpp)
-set(hdr_private_encoders
-	src/encoders/enc_nvidia.hpp)
 set(hdr_private_util
 	src/util/binaryio.hpp
 	src/util/bytebuffer.hpp
@@ -229,26 +221,6 @@ else()
 	message(FATAL_ERROR "Unsupported platform!")
 endif() 
 
-# CUDA kernels
-add_custom_command(
-	OUTPUT enc_nvidia.cubin enc_nvidia.cubin.inl
-	COMMAND ${CMAKE_CUDA_COMPILER} -allow-unsupported-compiler -fatbin ${CMAKE_CURRENT_SOURCE_DIR}/src/encoders/enc_nvidia.cu -o enc_nvidia.cubin
-	COMMAND ${xxd} -i enc_nvidia.cubin enc_nvidia.cubin.inl
-	DEPENDS src/encoders/enc_nvidia.cu
-)
-add_custom_command(
-	OUTPUT dec_nvidia.cubin dec_nvidia.cubin.inl
-	COMMAND ${CMAKE_CUDA_COMPILER} -allow-unsupported-compiler -fatbin ${CMAKE_CURRENT_SOURCE_DIR}/src/decoders/dec_nvidia.cu -o dec_nvidia.cubin
-	COMMAND ${xxd} -i dec_nvidia.cubin dec_nvidia.cubin.inl
-	DEPENDS src/decoders/dec_nvidia.cu
-)
-add_custom_target(
-	cuda_kernels
-	DEPENDS enc_nvidia.cubin enc_nvidia.cubin.inl dec_nvidia.cubin dec_nvidia.cubin.inl SOURCES src/encoders/enc_nvidia.cu src/decoders/dec_nvidia.cu
-)
-set_target_properties(cuda_kernels PROPERTIES FOLDER AVStream)
-
-
 add_library(libavstream STATIC ${hdr_private} ${src_private} ${hdr_public} ${src_platform})
 #set_target_runtime(libavstream static)
 set_target_properties(libavstream PROPERTIES PREFIX "")
@@ -314,7 +286,6 @@ endif()
 
 # Third party dependencies
 add_subdirectory(thirdparty/asio)
-add_subdirectory(thirdparty/nv)
 
 # Tests
 if(LIBAV_BUILD_TESTS)
@@ -322,14 +293,4 @@ if(LIBAV_BUILD_TESTS)
 	add_subdirectory(tests)
 endif()
 
-#Include CUDA library location.
-target_link_directories(libavstream PUBLIC "${LIBAV_CUDA_DIR}/lib/x64")
-
-target_link_libraries(libavstream cudart asio nv srt_static efp ${curl_libraries})
-
-# Build CUDA kernels on PC platforms only
-if(NOT ANDROID)
-	add_dependencies(libavstream cuda_kernels)
-	target_include_directories(libavstream PRIVATE "${LIBAV_CUDA_SAMPLES_DIR}/common/inc")
-	target_include_directories(libavstream PRIVATE "${LIBAV_CUDA_DIR}/include")
-endif()
+target_link_libraries(libavstream cudart asio srt_static efp ${curl_libraries})
