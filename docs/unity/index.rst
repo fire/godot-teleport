@@ -33,10 +33,6 @@ If you've installed the Teleport Unity SDK as a prebuilt package, you're ready t
 Use CMakeGui to set:
 
 * TELEPORT_SERVER to true
-* TELEPORT_UNITY to true
-* TELEPORT_UNITY_EDITOR_DIR to the folder where Unity.exe resides.
-* TELEPORT_UNITY_PLUGINS_DIR to the folder Plugins/x86_64 in the Teleport Unity assets folder, so that the C++ SDK will build TeleportServer.dll to that directory.
-* TELEPORT_UNITY_PROJECT_DIR to the root folder of your Unity project.
 
 Then build the Teleport_Server_Unity.sln solution. You can run Unity as normal, or debug the C++ code by setting TeleportServer as the active C++ project in the solution, and launching it for debugging.
 

@@ -40,10 +40,6 @@ set(src_private_root
 	src/libraryloader.cpp
 	src/timer.cpp
 )
-set(src_private_api
-	src/api/cuda.cpp
-	src/api/cuda_dx12.cpp
-)
 set(src_private_stream
 	src/stream/parser_avc.cpp
 	src/stream/parser_geo.cpp
@@ -78,9 +74,6 @@ set(hdr_private_root
 	src/networksource_p.hpp
 	src/libraryloader.hpp)
 
-set(hdr_private_api 
-	src/api/cuda.hpp
-    src/api/cuda_dx12.hpp)
 set(hdr_private_stream
 	src/stream/parser_avc.hpp
 	src/stream/parser_geo.hpp)
@@ -181,11 +174,6 @@ set(hdr_public_audio
 	include/libavstream/audio/audiotarget.h
 )
 	
-if(NOT TELEPORT_SERVER)
-	set(src_public_root ${src_public_root} include/libavstream/httputil.hpp)
-	set(src_private_root ${src_private_root} src/httputil.cpp)
-endif()
-
 set(hdr_public ${src_public_root} ${src_public_stream} ${src_public_decoders} ${src_public_encoders} ${src_public_surfaces} ${src_public_platforms} ${hdr_public_geometry} ${hdr_public_audio})
 source_group("Public Headers" src FILES ${src_public_root} )
 source_group("Public Headers\\stream" src FILES ${src_public_stream} )
@@ -224,7 +212,7 @@ if(WIN32)
 		src/surfaces/surface_dx12.cpp
 		include/libavstream/surfaces/surface_dx12.hpp
 	)
-	set(def_platform PLATFORM_WINDOWS UNICODE _WIN32_WINNT=0x0601 INIT_CUDA_D3D11=1)
+	set(def_platform PLATFORM_WINDOWS UNICODE _WIN32_WINNT=0x0601)
 	find_program(xxd NAMES xxd.exe HINTS tools/win32)
 	
 

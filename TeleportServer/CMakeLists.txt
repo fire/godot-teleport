@@ -56,26 +56,8 @@ else()
 endif()
 
 #Create static library with source files from group.
-if(TELEPORT_UNITY)
-	set(src_plugin
-		UnityPlugin/Export.h
-		UnityPlugin/InteropStructures.h
-		UnityPlugin/PluginGraphics.h
-		UnityPlugin/PluginGraphics.cpp
-		UnityPlugin/PluginMain.cpp
-	)
+add_library(TeleportServer STATIC ${src})
 
-	add_library(TeleportServer SHARED ${src} ${src_plugin})
-	set_target_properties( TeleportServer PROPERTIES 
-		VS_DEBUGGER_COMMAND ${TELEPORT_UNITY_EDITOR_DIR}/${TELEPORT_UNITY_EDITOR_EXE}
-		VS_DEBUGGER_COMMAND_ARGUMENTS "-projectPath \"${TELEPORT_UNITY_PROJECT_DIR}\""
-		VS_DEBUGGER_ENVIRONMENT ""
-		)
-	#Include Unity's native plugin interface headers
-	target_include_directories(TeleportServer PUBLIC ${TELEPORT_UNITY_EDITOR_DIR}/Data/PluginAPI)
-else()
-	add_library(TeleportServer STATIC ${src})
-endif()
 SetTeleportDefaults( TeleportServer )
 
 #Include its root directory

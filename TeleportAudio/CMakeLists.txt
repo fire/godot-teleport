@@ -1,9 +1,6 @@
 cmake_minimum_required( VERSION 3.8 )
 project( TeleportAudio )
 
-# Build options
-option(SA_BUILD_SHARED_LIB "Build shared library" OFF)
-
 set(DEBUG_CONFIGURATIONS Debug)
 
 # Source
@@ -39,13 +36,9 @@ message ( "src_public ${src_public}" )
 #source_group("src" src FILES ${src_root} )
 #source_group("src\\crossplatform" src FILES ${src_crossplatform} )
 
-if(SA_BUILD_SHARED_LIB)
-	#For MD runtime
-	add_library( TeleportAudio STATIC ${src_public} ) 
-else()
-	#For MT runtime
-	add_static_library( TeleportAudio SOURCES ${src_public} )  
-endif()
+#For MD runtime
+add_library( TeleportAudio STATIC ${src_public} ) 
+
 SetTeleportDefaults( TeleportAudio )
 set_target_properties( TeleportAudio PROPERTIES FOLDER Teleport )
 #Include libavstreamand TeleportCore
